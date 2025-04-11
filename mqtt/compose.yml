@@ -1,0 +1,29 @@
+services:
+  emqx1:
+    image: emqx:latest
+    environment:
+    - "EMQX_NODE__NAME=emqx@node1.emqx.io"
+    - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
+    - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io, emqx@node2.emqx.io]"
+    networks:
+      emqx-bridge:
+        aliases:
+        - node1.emqx.io
+    ports:
+      - 1883:1883
+
+  emqx2:
+    image: emqx:latest
+    environment:
+    - "EMQX_NODE__NAME=emqx@node2.emqx.io"
+    - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
+    - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io, emqx@node2.emqx.io]"
+    networks:
+      emqx-bridge:
+        aliases:
+        - node2.emqx.io
+
+networks:
+  emqx-bridge:
+    driver: bridge
+
